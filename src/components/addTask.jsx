@@ -1,10 +1,8 @@
 
-
 export const AddTask = () => {
 
-
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
+    <form className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
       <div className="w-full max-w-2xl">
         <div className="relative rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900 via-indigo-950 to-purple-950 backdrop-blur-xl shadow-2xl shadow-purple-500/20 p-8 lg:p-10 animate-in zoom-in-95 duration-300">
           {/* Decorative elements */}
@@ -17,26 +15,22 @@ export const AddTask = () => {
           <div className="relative mb-8">
             <div className="flex items-center justify-between mb-2">
               <h2 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent">
-                {isAdd ? '✨ Create New Task' : '📝 Edit Task'}
+                {isAdd ? "✨ Create New Task" : "📝 Edit Task"}
               </h2>
               <button
-                onClick={handleCloseClick}
                 type="button"
                 className="w-10 h-10 rounded-xl bg-white/5 hover:bg-red-500/20 border border-white/10 hover:border-red-500/30 flex items-center justify-center text-slate-400 hover:text-red-400 transition-all duration-300"
               >
                 ✕
               </button>
             </div>
-            <p className="text-sm text-slate-400">Fill in the details to {isAdd ? 'create' : 'update'} your task</p>
+            <p className="text-sm text-slate-400">Fill in the details to {isAdd ? "create" : "update"} your task</p>
           </div>
 
           <div className="relative space-y-6">
             {/* Title Field */}
             <div className="space-y-2 group">
-              <label
-                htmlFor="title"
-                className="text-sm font-semibold text-slate-300 flex items-center gap-2"
-              >
+              <label htmlFor="title" className="text-sm font-semibold text-slate-300 flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 group-hover:shadow-lg group-hover:shadow-cyan-500/50 transition-shadow"></span>
                 Task Title
                 <span className="text-red-400 ml-0.5">*</span>
@@ -45,8 +39,8 @@ export const AddTask = () => {
                 <input
                   className={`block w-full rounded-xl bg-white/5 border ${
                     errors.title
-                      ? 'border-red-500/50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20'
-                      : 'border-white/10 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20'
+                      ? "border-red-500/50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                      : "border-white/10 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                   } px-4 py-3.5 text-white placeholder:text-slate-500 focus:outline-none transition-all duration-300 hover:bg-white/10`}
                   type="text"
                   name="title"
@@ -72,10 +66,7 @@ export const AddTask = () => {
 
             {/* Description Field */}
             <div className="space-y-2 group">
-              <label
-                htmlFor="description"
-                className="text-sm font-semibold text-slate-300 flex items-center gap-2"
-              >
+              <label htmlFor="description" className="text-sm font-semibold text-slate-300 flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-blue-400 to-indigo-500 group-hover:shadow-lg group-hover:shadow-blue-500/50 transition-shadow"></span>
                 Description
                 <span className="text-red-400 ml-0.5">*</span>
@@ -83,8 +74,8 @@ export const AddTask = () => {
               <textarea
                 className={`block min-h-[120px] w-full rounded-xl bg-white/5 border ${
                   errors.description
-                    ? 'border-red-500/50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20'
-                    : 'border-white/10 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20'
+                    ? "border-red-500/50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                    : "border-white/10 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
                 } px-4 py-3.5 text-white placeholder:text-slate-500 focus:outline-none transition-all duration-300 resize-none hover:bg-white/10`}
                 name="description"
                 id="description"
@@ -109,10 +100,7 @@ export const AddTask = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Tags Field */}
               <div className="space-y-2 group">
-                <label
-                  htmlFor="tags"
-                  className="text-sm font-semibold text-slate-300 flex items-center gap-2"
-                >
+                <label htmlFor="tags" className="text-sm font-semibold text-slate-300 flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-indigo-400 to-purple-500 group-hover:shadow-lg group-hover:shadow-purple-500/50 transition-shadow"></span>
                   Tags
                   <span className="text-red-400 ml-0.5">*</span>
@@ -120,14 +108,14 @@ export const AddTask = () => {
                 <input
                   className={`block w-full rounded-xl bg-white/5 border ${
                     errors.tags
-                      ? 'border-red-500/50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20'
-                      : 'border-white/10 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20'
+                      ? "border-red-500/50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                      : "border-white/10 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"
                   } px-4 py-3.5 text-white placeholder:text-slate-500 focus:outline-none transition-all duration-300 hover:bg-white/10`}
                   type="text"
                   name="tags"
                   id="tags"
-                  placeholder="work, urgent, design"
-                  value={task.tags}
+                  placeholder="work, urgent, design (comma or space separated)"
+                  value={tagsInput}
                   onChange={handleChange}
                 />
                 {errors.tags && (
@@ -146,10 +134,7 @@ export const AddTask = () => {
 
               {/* Priority Field */}
               <div className="space-y-2 group">
-                <label
-                  htmlFor="priority"
-                  className="text-sm font-semibold text-slate-300 flex items-center gap-2"
-                >
+                <label htmlFor="priority" className="text-sm font-semibold text-slate-300 flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-purple-400 to-pink-500 group-hover:shadow-lg group-hover:shadow-pink-500/50 transition-shadow"></span>
                   Priority Level
                   <span className="text-red-400 ml-0.5">*</span>
@@ -157,18 +142,26 @@ export const AddTask = () => {
                 <select
                   className={`block w-full cursor-pointer rounded-xl bg-white/5 border ${
                     errors.priority
-                      ? 'border-red-500/50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20'
-                      : 'border-white/10 focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20'
+                      ? "border-red-500/50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                      : "border-white/10 focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
                   } px-4 py-3.5 text-white focus:outline-none transition-all duration-300 hover:bg-white/10`}
                   name="priority"
                   id="priority"
                   value={task.priority}
                   onChange={handleChange}
                 >
-                  <option value="" className="bg-slate-900">Select Priority</option>
-                  <option value="Low" className="bg-slate-900">🟢 Low Priority</option>
-                  <option value="Medium" className="bg-slate-900">🟡 Medium Priority</option>
-                  <option value="High" className="bg-slate-900">🔴 High Priority</option>
+                  <option value="" className="bg-slate-900">
+                    Select Priority
+                  </option>
+                  <option value="Low" className="bg-slate-900">
+                    🟢 Low Priority
+                  </option>
+                  <option value="Medium" className="bg-slate-900">
+                    🟡 Medium Priority
+                  </option>
+                  <option value="High" className="bg-slate-900">
+                    🔴 High Priority
+                  </option>
                 </select>
                 {errors.priority && (
                   <p className="text-red-400 text-xs flex items-center gap-1.5 animate-in slide-in-from-top-1 duration-200">
@@ -189,22 +182,20 @@ export const AddTask = () => {
           {/* Action Buttons */}
           <div className="mt-8 flex gap-3">
             <button
-              onClick={handleCloseClick}
               type="button"
               className="flex-1 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-red-500/30 px-6 py-3.5 text-white font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-red-500/20 active:scale-95"
             >
               Cancel
             </button>
             <button
-              onClick={handleSubmit}
               type="button"
               className="flex-1 rounded-xl bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-700 hover:from-cyan-500 hover:via-blue-500 hover:to-indigo-600 px-6 py-3.5 text-white font-semibold transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-0.5 active:scale-95"
             >
-              {isAdd ? '✓ Create Task' : '✓ Update Task'}
+              {isAdd ? "✓ Create Task" : "✓ Update Task"}
             </button>
           </div>
         </div>
       </div>
-    </div>
-  );
-};
+    </form>
+  )
+}

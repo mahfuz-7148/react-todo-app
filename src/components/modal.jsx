@@ -1,6 +1,16 @@
 // ✅ Reusable Confirmation Modal Component
-export default function Modal({isOpen, onClose, onConfirm, title = "Confirm Action", message = "Are you sure you want to proceed with this action?", confirmText = "Confirm", cancelText = "Cancel", variant = "danger"
-})
+export default function Modal({
+                                isOpen,
+                                onClose,
+                                onConfirm,
+                                title = "Confirm Action",
+                                message = "Are you sure you want to proceed with this action?",
+                                confirmText = "Confirm",
+                                cancelText = "Cancel",
+                                variant = "danger", // "danger", "warning", "success", "info"
+                                showExtraWarning = false,
+                                warningMessage = "This action cannot be undone!"
+          })
   {
   if (!isOpen) return null;
 

@@ -1,7 +1,18 @@
 import {useState} from 'react';
 
-export const SearchTask = () => {
+export const SearchTask = ({onSearch}) => {
+  const [searchTerm, setSearchTerm] = useState('')
+  const [isFocused, setIsFocused] = useState(false)
+  const handleChange = (e) => {
+    const value = e.target.value
+    setSearchTerm(value)
+    onSearch(value)
+  }
 
+  const handleClear = () => {
+   setSearchTerm('')
+    onSearch('')
+  }
   return (
     <div className="w-full max-w-2xl mx-auto">
       <div className="relative">
