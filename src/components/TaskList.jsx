@@ -6,7 +6,7 @@ const FaStar = ({ className, size }) => (
   </svg>
 )
 
-export const TaskList = ({ tasks, onFav, onEdit, onDelete }) => {
+export const TaskList = () => {
   const getPriorityColor = (priority) => {
     switch (priority?.toLowerCase()) {
       case "high":
@@ -23,41 +23,32 @@ export const TaskList = ({ tasks, onFav, onEdit, onDelete }) => {
   return (
     <div className="w-full">
       <div className="space-y-3">
-        {tasks.map((task) => (
           <div
-            key={task.id}
             className="border border-gray-700/30 rounded-lg p-5 hover:bg-gray-800/30 duration-200 bg-gray-800/10"
           >
             <div className="flex items-start justify-between gap-4 mb-3">
               <div className="flex items-start gap-3 flex-1">
-                <button onClick={() => onFav(task.id)} className="mt-1 flex-shrink-0">
-                  {task.isFavorite ? (
+                <button className="mt-1 flex-shrink-0">
+
                     <FaStar className="text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]" size={18} />
-                  ) : (
+
                     <FaStar className="text-gray-600 hover:text-gray-400" size={18} />
-                  )}
+
                 </button>
 
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-gray-100 font-semibold text-lg mb-1">{task.title}</h3>
-                  <p className="text-gray-400 text-sm">{task.description}</p>
+                  <h3 className="text-gray-100 font-semibold text-lg mb-1"></h3>
+                  <p className="text-gray-400 text-sm"></p>
                 </div>
               </div>
 
               <span
-                className={`px-3 py-1 rounded-lg border text-xs font-semibold flex-shrink-0 ${getPriorityColor(
-                  task.priority,
-                )}`}
-              >
-                {task.priority}
+                className='px-3 py-1 rounded-lg border text-xs font-semibold flex-shrink-0'>
               </span>
             </div>
 
             <div className="flex flex-wrap gap-2 mb-4">
-              {task.tags.map((tag) => (
                 <span
-                  key={tag}
-                  style={getTagSolidStyle(tag)}
                   className="inline-flex h-6 px-3 rounded-full text-xs capitalize whitespace-nowrap"
                 >
                   {tag}
@@ -68,14 +59,12 @@ export const TaskList = ({ tasks, onFav, onEdit, onDelete }) => {
             <div className="flex justify-end gap-2">
               <button
                 className="px-3 py-1.5 rounded-lg bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs hover:bg-blue-500/20"
-                onClick={() => onEdit(task)}
               >
                 Edit
               </button>
 
               <button
                 className="px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-xs hover:bg-red-500/20"
-                onClick={() => onDelete(task.id, task.title)}
               >
                 Delete
               </button>
