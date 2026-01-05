@@ -135,7 +135,7 @@ export const TaskBoard = () => {
 
       {/* add modal */}
       {showModal && (
-        <AddTask onAddEdit={handleAddEditTask} taskToUpdate={taskToUpdate} handleCloseClick={handleCloseClick} />
+        <AddTask onAddEdit={handleAddEditTask} taskToUpdate={taskToUpdate} onCloseClick={handleCloseClick} />
       )}
 
       {/* Search */}
