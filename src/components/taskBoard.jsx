@@ -112,7 +112,6 @@ export const TaskBoard = () => {
     );
   };
 
-
   const handleClearTags = () => setSelectedTags([]);
 
   return (
@@ -149,16 +148,16 @@ export const TaskBoard = () => {
       {/* add modal */}
       {showAddModal && (
         <AddTask
-          onSave={handleAddEditTask}
+          onAddEdit={handleAddEditTask}
           taskToUpdate={taskToUpdate}
-          handleCloseClick={handleCloseClick}
+          onCloseClick={handleCloseClick}
         />
       )}
 
       {/* Search */}
       <div className="container">
         <div className="p-2 flex justify-end mb-4">
-          <SearchTask onSearch={handleSearch} />
+          <SearchTask onSearch={handleSearch} searchTerm={searchTerm}/>
         </div>
       </div>
 
