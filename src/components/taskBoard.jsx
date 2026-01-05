@@ -1,12 +1,19 @@
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
+import localforage from 'localforage'
 import { AddTask } from "./addTask.jsx"
 import { TaskActions } from "./taskActions.jsx"
 import { TaskList } from "./TaskList.jsx"
 import NoTasksFound from "./NoTasksFound.jsx"
 import Modal from "./modal.jsx"
 import { SearchTask } from "./searchTask.jsx"
-import {PriorityFilter} from './priorityFilter.jsx';
-import {TagFilter} from './tagFilter.jsx';
+import { PriorityFilter } from './priorityFilter.jsx'
+import { TagFilter } from './tagFilter.jsx'
+
+// LocalForage configuration
+localforage.config({
+  name: 'ReactTodoApp',
+  storeName: 'tasks'
+})
 
 export const TaskBoard = () => {
   const [allTasks, setAllTasks] = useState([])
@@ -17,6 +24,41 @@ export const TaskBoard = () => {
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, taskId: null, taskTitle: "" })
   const [deleteAllModal, setDeleteAllModal] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
+  const [isLoading, setIsLoading] = useState(true)
+
+  // Load tasks from LocalForage on component mount
+  useEffect(() => {
+    const loadTasks = async () => {
+      try {
+        const savedTasks = await localforage.getItem('allTasks')
+        if (savedTasks && Array.isArray(savedTasks)) {
+          setAllTasks(savedTasks)
+        }
+      } catch (err) {
+        console.error('Error loading tasks from LocalForage:', err)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadTasks()
+  }, [])
+
+  // Save tasks to LocalForage whenever they change
+  useEffect(() => {
+    if (!isLoading) {
+      const saveTasks = async () => {
+        try {
+          await localforage.setItem('allTasks', allTasks)
+          console.log('Tasks saved successfully!')
+        } catch (err) {
+          console.error('Error saving tasks to LocalForage:', err)
+        }
+      }
+
+      saveTasks()
+    }
+  }, [allTasks, isLoading])
 
   const handleSearch = (val) => setSearchTerm(val)
   const handlePriorityChange = (p) => setSelectedPriority(p)
@@ -76,9 +118,17 @@ export const TaskBoard = () => {
     if (allTasks.length > 0) setDeleteAllModal(true)
   }
 
-  const confirmDeleteAll = () => {
+  const confirmDeleteAll = async () => {
     setAllTasks([])
     setDeleteAllModal(false)
+
+    // Clear from LocalForage as well
+    try {
+      await localforage.removeItem('allTasks')
+      console.log('All tasks cleared from storage!')
+    } catch (err) {
+      console.error('Error clearing tasks from LocalForage:', err)
+    }
   }
 
   const getAvailableTags = () => {
@@ -97,11 +147,25 @@ export const TaskBoard = () => {
 
   const handleTagToggle = (tag) => {
     const lowerTag = tag.toLowerCase()
-
     setSelectedTags((prev) => (prev.includes(lowerTag) ? prev.filter((t) => t !== lowerTag) : [...prev, lowerTag]))
   }
 
   const handleClearTags = () => setSelectedTags([])
+
+  // Loading state UI
+  if (isLoading) {
+    return (
+      <section className="mb-20 flex items-center justify-center min-h-[400px]" id="tasks">
+        <div className="text-center">
+          <div className="relative w-16 h-16 mx-auto mb-4">
+            <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-cyan-400 border-r-blue-500 animate-spin"></div>
+            <div className="absolute inset-2 rounded-full border-4 border-transparent border-b-indigo-400 border-l-purple-500 animate-spin" style={{ animationDirection: 'reverse' }}></div>
+          </div>
+          <p className="text-slate-400 text-lg font-medium">Loading your tasks...</p>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section className="mb-20" id="tasks">
