@@ -1,4 +1,4 @@
-export const TaskActions = ({ onAddClick, onDeleteAllClick }) => {
+export const TaskActions = ({onAddClick, onDeleteAllClick}) => {
   return (
     <div className="mb-14 flex flex-col sm:flex-row items-center justify-between gap-6 w-full">
 

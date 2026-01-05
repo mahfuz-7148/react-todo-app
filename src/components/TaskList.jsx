@@ -6,7 +6,7 @@ const FaStar = ({ className, size }) => (
   </svg>
 )
 
-export const TaskList = ({ tasks, onFav, onEdit, onDelete }) => {
+export const TaskList = ({ tasks, onEdit, onDelete, onFav}) => {
   const getPriorityColor = (priority) => {
     switch (priority?.toLowerCase()) {
       case "high":
