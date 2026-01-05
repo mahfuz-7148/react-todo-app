@@ -1,48 +1,64 @@
-import { useState, useMemo } from "react"
+import { useState, useEffect } from "react"
+import localforage from 'localforage'
 import { AddTask } from "./addTask.jsx"
 import { TaskActions } from "./taskActions.jsx"
 import { TaskList } from "./TaskList.jsx"
 import NoTasksFound from "./NoTasksFound.jsx"
 import Modal from "./modal.jsx"
 import { SearchTask } from "./searchTask.jsx"
-import {PriorityFilter} from './priorityFilter.jsx';
-import {TagFilter} from './tagFilter.jsx';
+import { PriorityFilter } from './priorityFilter.jsx'
+import { TagFilter } from './tagFilter.jsx'
+
+// LocalForage configuration
+localforage.config({
+  name: 'TodoApp',
+  storeName: 'tasks',
+  description: 'Todo app tasks storage'
+})
 
 export const TaskBoard = () => {
   const [allTasks, setAllTasks] = useState([])
-  const [selectedTags, setSelectedTags] = useState([])
-  const [selectedPriority, setSelectedPriority] = useState("all")
   const [showModal, setShowModal] = useState(false)
   const [taskToUpdate, setTaskToUpdate] = useState(null)
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, taskId: null, taskTitle: "" })
   const [deleteAllModal, setDeleteAllModal] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
+  const [selectedPriority, setSelectedPriority] = useState("All")
+  const [selectedTags, setSelectedTags] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
 
-  const handleSearch = (val) => setSearchTerm(val)
-  const handlePriorityChange = (p) => setSelectedPriority(p)
-
-  const filteredTasks = useMemo(() => {
-    let final = [...allTasks]
-
-    if (searchTerm.trim() !== "") {
-      const q = searchTerm.toLowerCase()
-      final = final.filter((t) => t.title.toLowerCase().includes(q))
+  // Load tasks from LocalForage on mount
+  useEffect(() => {
+    const loadTasks = async () => {
+      try {
+        const savedTasks = await localforage.getItem('allTasks')
+        if (savedTasks && Array.isArray(savedTasks)) {
+          setAllTasks(savedTasks)
+        }
+      } catch (err) {
+        console.error('Error loading tasks:', err)
+      } finally {
+        setIsLoading(false)
+      }
     }
 
-    if (selectedPriority !== "all") {
-      final = final.filter((t) => t.priority.toLowerCase() === selectedPriority.toLowerCase())
-    }
+    loadTasks()
+  }, [])
 
-    if (selectedTags.length > 0) {
-      const tagsLower = selectedTags.map((t) => t.toLowerCase())
-      final = final.filter((task) => {
-        const taskTags = task.tags.map((tg) => tg.toLowerCase())
-        return tagsLower.some((tg) => taskTags.includes(tg))
-      })
-    }
+  // Save tasks to LocalForage whenever they change
+  useEffect(() => {
+    if (!isLoading) {
+      const saveTasks = async () => {
+        try {
+          await localforage.setItem('allTasks', allTasks)
+        } catch (err) {
+          console.error('Error saving tasks:', err)
+        }
+      }
 
-    return final
-  }, [allTasks, searchTerm, selectedPriority, selectedTags])
+      saveTasks()
+    }
+  }, [allTasks, isLoading])
 
   const handleAddEditTask = (isAdd, newTask) => {
     setAllTasks((prev) => (isAdd ? [...prev, newTask] : prev.map((t) => (t.id === newTask.id ? newTask : t))))
@@ -76,32 +92,62 @@ export const TaskBoard = () => {
     if (allTasks.length > 0) setDeleteAllModal(true)
   }
 
-  const confirmDeleteAll = () => {
+  const confirmDeleteAll = async () => {
     setAllTasks([])
     setDeleteAllModal(false)
+    // Optional: Clear from LocalForage immediately
+    try {
+      await localforage.removeItem('allTasks')
+    } catch (err) {
+      console.error('Error clearing tasks:', err)
+    }
   }
 
-  const getAvailableTags = () => {
-    const tagSet = new Set()
-    allTasks.forEach((task) => {
-      task.tags.forEach((tag) => {
-        if (tag && tag.trim()) {
-          tagSet.add(tag.trim().toLowerCase())
-        }
-      })
-    })
-    return Array.from(tagSet).sort()
+  const handleSearch = (term) => {
+    setSearchTerm(term)
   }
 
-  const availableTags = getAvailableTags()
+  const handlePriorityChange = (priority) => {
+    setSelectedPriority(priority)
+  }
 
   const handleTagToggle = (tag) => {
-    const lowerTag = tag.toLowerCase()
-
-    setSelectedTags((prev) => (prev.includes(lowerTag) ? prev.filter((t) => t !== lowerTag) : [...prev, lowerTag]))
+    setSelectedTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+    )
   }
 
-  const handleClearTags = () => setSelectedTags([])
+  const handleClearTags = () => {
+    setSelectedTags([])
+  }
+
+  // Get all unique tags
+  const availableTags = [...new Set(allTasks.flatMap((task) => task.tags))]
+
+  // Filter tasks
+  const filteredTasks = allTasks.filter((task) => {
+    const matchesSearch =
+      task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      task.description.toLowerCase().includes(searchTerm.toLowerCase())
+
+    const matchesPriority = selectedPriority === "All" || task.priority === selectedPriority
+
+    const matchesTags =
+      selectedTags.length === 0 || selectedTags.some((tag) => task.tags.map((t) => t.toLowerCase()).includes(tag))
+
+    return matchesSearch && matchesPriority && matchesTags
+  })
+
+  if (isLoading) {
+    return (
+      <section className="mb-20 flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-slate-400">Loading tasks...</p>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section className="mb-20" id="tasks">
