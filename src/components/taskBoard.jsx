@@ -31,7 +31,7 @@ export const TaskBoard = () => {
     const loadTasks = async () => {
       try {
         const savedTasks = await localforage.getItem('allTasks')
-        if (savedTasks && Array.isArray(savedTasks)) {
+        if (savedTasks) {
           setAllTasks(savedTasks)
         }
       } catch (err) {

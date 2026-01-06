@@ -11,7 +11,7 @@ export const App = () => {
     // Simulate loading time or wait for data to load
     const timer = setTimeout(() => {
       setIsLoading(false)
-    }, 300) // 1.5 seconds loading
+    }, 300)
 
     return () => clearTimeout(timer)
   }, [])

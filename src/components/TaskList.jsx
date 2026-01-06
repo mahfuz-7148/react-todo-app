@@ -30,7 +30,7 @@ export const TaskList = ({ tasks, onEdit, onDelete, onFav}) => {
           >
             <div className="flex items-start justify-between gap-4 mb-3">
               <div className="flex items-start gap-3 flex-1">
-                <button onClick={() => onFav(task.id)} className="mt-1 flex-shrink-0">
+                <button onClick={() => onFav(task.id)} className="mt-1 shrink-0">
                   {task.isFavorite ? (
                     <FaStar className="text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]" size={18} />
                   ) : (
