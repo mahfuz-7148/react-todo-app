@@ -7,7 +7,7 @@ export const Footer = () => {
   };
 
   return (
-    <footer className="relative bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950 text-white overflow-hidden">
+    <footer className="relative bg-linear-to-br from-slate-950 via-indigo-950 to-slate-950 text-white overflow-hidden">
       {/* Sophisticated background pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-0 left-0 w-full h-full" style={{
