@@ -1,486 +1,322 @@
-// import { useState, useMemo } from "react"
-// import { getTagSolidStyle } from "./tagColors.js"
-//
-// const FaStar = ({ className, size }) => (
-//   <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-//     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-//   </svg>
-// )
-//
-// const PaginationButton = ({ children, active, disabled, onClick }) => (
-//   <button
-//     onClick={onClick}
-//     disabled={disabled}
-//     className={[
-//       "inline-flex items-center justify-center px-3 h-8 rounded-md text-xs font-medium transition-all duration-150",
-//       disabled
-//         ? "opacity-40 cursor-not-allowed"
-//         : "hover:bg-gray-800/70 hover:text-gray-100",
-//       active
-//         ? "bg-blue-500 text-white shadow-[0_0_18px_rgba(59,130,246,0.5)]"
-//         : "bg-gray-800/60 text-gray-300 border border-gray-700/70",
-//     ].join(" ")}
-//   >
-//     {children}
-//   </button>
-// )
-//
-// export const TaskList = ({ tasks, onEdit, onDelete, onFav }) => {
-//   const [currentPage, setCurrentPage] = useState(1)
-//   const pageSize = 3
-//
-//   const totalPages = Math.max(1, Math.ceil((tasks?.length || 0) / pageSize))
-//
-//   const currentTasks = useMemo(() => {
-//     const start = (currentPage - 1) * pageSize
-//     const end = start + pageSize
-//     return tasks.slice(start, end)
-//   }, [tasks, currentPage])
-//
-//   const handlePageChange = (page) => {
-//     if (page < 1 || page > totalPages) return
-//     setCurrentPage(page)
-//   }
-//
-//   return (
-//     <div className="w-full space-y-4">
-//       {/* Header + meta info */}
-//       <div className="flex items-center justify-between gap-3">
-//         <div>
-//           <h2 className="text-sm font-semibold tracking-wide text-gray-300 uppercase">
-//             Tasks Overview
-//           </h2>
-//           <p className="text-xs text-gray-500">
-//             Page {currentPage} of {totalPages} • Showing{" "}
-//             <span className="text-blue-400 font-medium">
-//               {currentTasks.length}
-//             </span>{" "}
-//             out of{" "}
-//             <span className="text-gray-300 font-medium">
-//               {tasks.length}
-//             </span>{" "}
-//             tasks
-//           </p>
-//         </div>
-//
-//         <div className="inline-flex items-center gap-2 rounded-full border border-gray-700/70 bg-gray-900/80 px-3 py-1.5 shadow-[0_0_25px_rgba(15,23,42,0.9)]">
-//           <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.9)]" />
-//           <span className="text-[11px] text-gray-400">
-//             Per page: <span className="text-gray-200 font-medium">{pageSize}</span>
-//           </span>
-//         </div>
-//       </div>
-//
-//       {/* Task cards */}
-//       <div className="space-y-3">
-//         {currentTasks.map((task) => (
-//           <div
-//             key={task.id}
-//             className="border border-gray-700/40 rounded-xl p-5 bg-gradient-to-br from-gray-900/80 via-slate-900/80 to-black/80
-//                        hover:border-blue-500/40 hover:shadow-[0_0_22px_rgba(59,130,246,0.25)] transition-all duration-200"
-//           >
-//             <div className="flex items-start justify-between gap-4 mb-3">
-//               <div className="flex items-start gap-3 flex-1">
-//                 <button
-//                   onClick={() => onFav(task.id)}
-//                   className="mt-1 shrink-0 rounded-full p-1.5 bg-gray-900/80 hover:bg-gray-800/80 transition-colors"
-//                 >
-//                   {task.isFavorite ? (
-//                     <FaStar
-//                       className="text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.8)]"
-//                       size={18}
-//                     />
-//                   ) : (
-//                     <FaStar
-//                       className="text-gray-600 hover:text-gray-300 transition-colors"
-//                       size={18}
-//                     />
-//                   )}
-//                 </button>
-//
-//                 <div className="flex-1 min-w-0">
-//                   <h3 className="text-gray-50 font-semibold text-lg mb-1 line-clamp-1">
-//                     {task.title}
-//                   </h3>
-//                   <p className="text-gray-400 text-sm leading-relaxed line-clamp-3">
-//                     {task.description}
-//                   </p>
-//
-//                   <div className="mt-2 flex items-center gap-2 text-[10px] text-gray-500">
-//                     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gray-900/70 border border-gray-700/80">
-//                       <span className="h-1.5 w-1.5 rounded-full bg-blue-400" />
-//                       Priority: <span className="text-gray-300 capitalize">{task.priority || "none"}</span>
-//                     </span>
-//                     <span className="text-gray-600">•</span>
-//                     <span className="uppercase tracking-wide">
-//                       {task.tags?.length || 0} tags
-//                     </span>
-//                   </div>
-//                 </div>
-//               </div>
-//
-//               <span
-//                 className={`px-3 py-1 rounded-lg border text-xs font-semibold flex-shrink-0
-//                             shadow-[0_0_16px_rgba(15,23,42,0.8)] ${(() => {
-//                   switch (task.priority?.toLowerCase()) {
-//                     case "high":
-//                       return "bg-red-500/10 text-red-300 border-red-500/40"
-//                     case "medium":
-//                       return "bg-yellow-500/10 text-yellow-300 border-yellow-500/40"
-//                     case "low":
-//                       return "bg-emerald-500/10 text-emerald-300 border-emerald-500/40"
-//                     default:
-//                       return "bg-slate-700/40 text-slate-300 border-slate-500/40"
-//                   }
-//                 })()}`}
-//               >
-//                 {task.priority || "No priority"}
-//               </span>
-//             </div>
-//
-//             {task.tags?.length > 0 && (
-//               <div className="flex flex-wrap gap-2 mb-4">
-//                 {task.tags.map((tag) => (
-//                   <span
-//                     key={tag}
-//                     style={getTagSolidStyle(tag)}
-//                     className="inline-flex h-6 px-3 rounded-full text-[11px] capitalize whitespace-nowrap
-//                                border border-white/10 shadow-[0_0_12px_rgba(15,23,42,0.8)]"
-//                   >
-//                     {tag}
-//                   </span>
-//                 ))}
-//               </div>
-//             )}
-//
-//             <div className="flex justify-end gap-2">
-//               <button
-//                 className="px-3 py-1.5 rounded-lg bg-blue-500/10 border border-blue-500/40
-//                            text-blue-300 text-xs hover:bg-blue-500/25 hover:text-blue-50
-//                            shadow-[0_0_14px_rgba(59,130,246,0.3)] transition-all"
-//                 onClick={() => onEdit(task)}
-//               >
-//                 Edit
-//               </button>
-//
-//               <button
-//                 className="px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/40
-//                            text-red-300 text-xs hover:bg-red-500/25 hover:text-red-50
-//                            shadow-[0_0_14px_rgba(248,113,113,0.4)] transition-all"
-//                 onClick={() => onDelete(task.id, task.title)}
-//               >
-//                 Delete
-//               </button>
-//             </div>
-//           </div>
-//         ))}
-//
-//         {currentTasks.length === 0 && (
-//           <div className="border border-dashed border-gray-700/60 rounded-xl py-10 px-4 text-center bg-gray-900/70">
-//             <p className="text-sm text-gray-400">
-//               এই পেইজে দেখানোর মতো কোনো টাস্ক নেই। আগের অথবা পরের পেইজ দেখুন।
-//             </p>
-//           </div>
-//         )}
-//       </div>
-//
-//       {/* Pagination controls */}
-//       <div className="flex items-center justify-between pt-2 border-t border-gray-800/70">
-//         <div className="text-[11px] text-gray-500">
-//           Showing{" "}
-//           <span className="text-gray-200">
-//             {(currentPage - 1) * pageSize + 1}
-//           </span>{" "}
-//           –{" "}
-//           <span className="text-gray-200">
-//             {(currentPage - 1) * pageSize + currentTasks.length}
-//           </span>{" "}
-//           of{" "}
-//           <span className="text-gray-200">
-//             {tasks.length}
-//           </span>
-//         </div>
-//
-//         <div className="flex items-center gap-1.5">
-//           <PaginationButton
-//             disabled={currentPage === 1}
-//             onClick={() => handlePageChange(currentPage - 1)}
-//           >
-//             ‹ Prev
-//           </PaginationButton>
-//
-//           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-//             <PaginationButton
-//               key={page}
-//               active={page === currentPage}
-//               onClick={() => handlePageChange(page)}
-//             >
-//               {page}
-//             </PaginationButton>
-//           ))}
-//
-//           <PaginationButton
-//             disabled={currentPage === totalPages}
-//             onClick={() => handlePageChange(currentPage + 1)}
-//           >
-//             Next ›
-//           </PaginationButton>
-//         </div>
-//       </div>
-//     </div>
-//   )
-// }
+import { getTagSolidStyle } from "./tagColors.js"
+import { useState } from "react"
 
+// Icon Components
+const FaStar = ({ className, size }) => (
+  <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+  </svg>
+)
 
+const ChevronLeft = ({ size = 20 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M15 18l-6-6 6-6" />
+  </svg>
+)
 
-import { useState, useMemo, useCallback } from "react"
-import { Star, ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react"
-import { getTagSolidStyle } from "./tagColors"
+const ChevronRight = ({ size = 20 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M9 18l6-6-6-6" />
+  </svg>
+)
 
-const ITEMS_PER_PAGE = 3
+const GridIcon = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <rect x="3" y="3" width="7" height="7" />
+    <rect x="14" y="3" width="7" height="7" />
+    <rect x="14" y="14" width="7" height="7" />
+    <rect x="3" y="14" width="7" height="7" />
+  </svg>
+)
 
-const getPriorityColor = (priority) => {
-  switch (priority?.toLowerCase()) {
-    case "high":
-      return "bg-red-500/10 text-red-400 border-red-500/30"
-    case "medium":
-      return "bg-yellow-500/10 text-yellow-400 border-yellow-500/30"
-    case "low":
-      return "bg-green-500/10 text-green-400 border-green-500/30"
-    default:
-      return "bg-gray-500/10 text-gray-400 border-gray-500/30"
-  }
+// Constants
+const TASKS_PER_PAGE = 3
+const MAX_VISIBLE_PAGES = 5
+const PRIORITY_COLORS = {
+  high: "bg-red-500/10 text-red-400 border-red-500/30",
+  medium: "bg-yellow-500/10 text-yellow-400 border-yellow-500/30",
+  low: "bg-green-500/10 text-green-400 border-green-500/30",
+  default: "bg-gray-500/10 text-gray-400 border-gray-500/30"
 }
 
-const getPageNumbersHelper = (currentPage, totalPages) => {
-  const pages = []
-  const maxPagesToShow = 5
-
-  if (totalPages <= maxPagesToShow) {
-    for (let i = 1; i <= totalPages; i++) {
-      pages.push(i)
-    }
-  } else {
-    pages.push(1)
-
-    if (currentPage > 3) {
-      pages.push("...")
-    }
-
-    const startPage = Math.max(2, currentPage - 1)
-    const endPage = Math.min(totalPages - 1, currentPage + 1)
-
-    for (let i = startPage; i <= endPage; i++) {
-      if (!pages.includes(i)) {
-        pages.push(i)
+// Sub-components
+const FavoriteButton = ({ isFavorite, onClick }) => (
+  <button onClick={onClick} className="mt-1 shrink-0" aria-label="Toggle favorite">
+    <FaStar
+      className={isFavorite
+        ? "text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]"
+        : "text-gray-600 hover:text-gray-400"
       }
-    }
+      size={18}
+    />
+  </button>
+)
 
-    if (currentPage < totalPages - 2) {
-      pages.push("...")
-    }
+const PriorityBadge = ({ priority }) => {
+  const colorClass = PRIORITY_COLORS[priority?.toLowerCase()] || PRIORITY_COLORS.default
 
-    pages.push(totalPages)
-  }
-
-  return pages
+  return (
+    <span className={`px-3 py-1 rounded-lg border text-xs font-semibold flex-shrink-0 ${colorClass}`}>
+      {priority}
+    </span>
+  )
 }
 
+const TagList = ({ tags }) => (
+  <div className="flex flex-wrap gap-2 mb-3 overflow-hidden">
+    {tags.map((tag) => (
+      <span
+        key={tag}
+        style={getTagSolidStyle(tag)}
+        className="inline-flex h-6 px-3 rounded-full text-xs capitalize whitespace-nowrap"
+      >
+        {tag}
+      </span>
+    ))}
+  </div>
+)
+
+const TaskActions = ({ onEdit, onDelete, task }) => (
+  <div className="flex justify-end gap-2">
+    <button
+      className="px-3 py-1.5 rounded-lg bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs hover:bg-blue-500/20 transition-colors"
+      onClick={() => onEdit(task)}
+    >
+      Edit
+    </button>
+    <button
+      className="px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-xs hover:bg-red-500/20 transition-colors"
+      onClick={() => onDelete(task.id, task.title)}
+    >
+      Delete
+    </button>
+  </div>
+)
+
+const TaskCard = ({ task, onEdit, onDelete, onFav }) => (
+  <div className="border border-gray-700/30 rounded-lg p-5 hover:bg-gray-800/30 duration-200 bg-gray-800/10 h-[180px] flex flex-col">
+    <div className="flex items-start justify-between gap-4 mb-3">
+      <div className="flex items-start gap-3 flex-1 min-h-0">
+        <FavoriteButton isFavorite={task.isFavorite} onClick={() => onFav(task.id)} />
+
+        <div className="flex-1 min-w-0">
+          <h3 className="text-gray-100 font-semibold text-lg mb-1 line-clamp-1">{task.title}</h3>
+          <p className="text-gray-400 text-sm line-clamp-2">{task.description}</p>
+        </div>
+      </div>
+
+      <PriorityBadge priority={task.priority} />
+    </div>
+
+    <div className="flex-1 min-h-0 overflow-hidden">
+      <TagList tags={task.tags} />
+    </div>
+
+    <TaskActions onEdit={onEdit} onDelete={onDelete} task={task} />
+  </div>
+)
+
+const PageButton = ({ page, isActive, onClick }) => (
+  <button
+    onClick={() => onClick(page)}
+    className={`w-9 h-9 rounded-lg border font-medium text-sm transition-all ${
+      isActive
+        ? "bg-blue-500/20 border-blue-500/50 text-blue-400 shadow-[0_0_12px_rgba(59,130,246,0.3)]"
+        : "border-gray-700/30 text-gray-400 hover:bg-gray-700/30 hover:border-gray-600/50"
+    }`}
+  >
+    {page}
+  </button>
+)
+
+const NavigationButton = ({ onClick, disabled, direction }) => (
+  <button
+    onClick={onClick}
+    disabled={disabled}
+    className={`flex items-center justify-center w-9 h-9 rounded-lg border transition-all ${
+      disabled
+        ? "border-gray-700/30 text-gray-600 cursor-not-allowed"
+        : "border-gray-700/30 text-gray-400 hover:bg-gray-700/30 hover:border-gray-600/50"
+    }`}
+    aria-label={direction === 'prev' ? 'Previous page' : 'Next page'}
+  >
+    {direction === 'prev' ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
+  </button>
+)
+
+const PageDropdown = ({ totalPages, currentPage, onPageSelect, show }) => {
+  if (!show) return null
+
+  const remainingPages = Array.from({ length: totalPages - MAX_VISIBLE_PAGES }, (_, i) => i + MAX_VISIBLE_PAGES + 1)
+
+  return (
+    <div className="absolute bottom-full right-0 mb-2 w-80 bg-gray-900 border border-gray-700/50 rounded-xl shadow-[0_20px_60px_rgba(0,0,0,0.5)] backdrop-blur-sm overflow-hidden animate-[dropdownSlide_0.2s_ease-out] z-50">
+      <div className="p-4 border-b border-gray-700/50 bg-gray-800/30">
+        <h4 className="text-sm font-semibold text-gray-200">More Pages</h4>
+        <p className="text-xs text-gray-400 mt-0.5">Pages {MAX_VISIBLE_PAGES + 1} to {totalPages}</p>
+      </div>
+
+      <div className="p-4 max-h-64 overflow-y-auto">
+        <div className="grid grid-cols-6 gap-2">
+          {remainingPages.map((page) => (
+            <button
+              key={page}
+              onClick={() => onPageSelect(page)}
+              className={`h-10 rounded-lg border font-semibold text-sm transition-all ${
+                currentPage === page
+                  ? "bg-blue-500/20 border-blue-500/50 text-blue-400 shadow-[0_0_12px_rgba(59,130,246,0.4)] scale-105"
+                  : "border-gray-700/30 text-gray-400 hover:bg-gray-800/50 hover:border-gray-600/50 hover:text-gray-300"
+              }`}
+            >
+              {page}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="p-3 border-t border-gray-700/50 bg-gray-800/30">
+        <div className="text-xs text-gray-400 text-center">
+          Current: <span className="font-semibold text-blue-400">Page {currentPage}</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const Pagination = ({
+                      currentPage,
+                      totalPages,
+                      startIndex,
+                      endIndex,
+                      totalItems,
+                      onPageChange
+                    }) => {
+  const [showDropdown, setShowDropdown] = useState(false)
+
+  const visiblePages = Array.from({ length: Math.min(MAX_VISIBLE_PAGES, totalPages) }, (_, i) => i + 1)
+
+  const handlePageSelect = (page) => {
+    onPageChange(page)
+    setShowDropdown(false)
+  }
+
+  if (totalPages <= 1) return null
+
+  return (
+    <div className="flex items-center justify-between border-t border-gray-700/30 pt-6">
+      <div className="text-sm text-gray-400">
+        Showing <span className="font-semibold text-gray-300">{startIndex + 1}</span> to{" "}
+        <span className="font-semibold text-gray-300">{Math.min(endIndex, totalItems)}</span> of{" "}
+        <span className="font-semibold text-gray-300">{totalItems}</span> tasks
+      </div>
+
+      <div className="flex items-center gap-2">
+        <NavigationButton
+          onClick={() => onPageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          direction="prev"
+        />
+
+        <div className="flex items-center gap-1">
+          {visiblePages.map((page) => (
+            <PageButton
+              key={page}
+              page={page}
+              isActive={currentPage === page}
+              onClick={handlePageSelect}
+            />
+          ))}
+
+          {totalPages > MAX_VISIBLE_PAGES && (
+            <div
+              className="relative ml-1"
+              onMouseEnter={() => setShowDropdown(true)}
+              onMouseLeave={() => setShowDropdown(false)}
+            >
+              <button className="flex items-center gap-1.5 px-3 h-9 rounded-lg border border-purple-500/30 bg-purple-500/10 text-purple-400 font-medium text-sm hover:bg-purple-500/20 hover:shadow-[0_0_12px_rgba(168,85,247,0.3)] transition-all">
+                <GridIcon size={14} />
+                Show All
+              </button>
+
+              <PageDropdown
+                totalPages={totalPages}
+                currentPage={currentPage}
+                onPageSelect={handlePageSelect}
+                show={showDropdown}
+              />
+            </div>
+          )}
+        </div>
+
+        <NavigationButton
+          onClick={() => onPageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          direction="next"
+        />
+      </div>
+    </div>
+  )
+}
+
+const EmptyState = () => (
+  <div className="w-full flex items-center justify-center py-16">
+    <p className="text-gray-500 text-lg">No tasks found</p>
+  </div>
+)
+
+// Main Component
 export const TaskList = ({ tasks, onEdit, onDelete, onFav }) => {
   const [currentPage, setCurrentPage] = useState(1)
 
-  const paginationData = useMemo(() => {
-    const totalPages = Math.ceil(tasks.length / ITEMS_PER_PAGE)
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
-    const endIndex = startIndex + ITEMS_PER_PAGE
-    const currentTasks = tasks.slice(startIndex, endIndex)
-    const pageNumbers = getPageNumbersHelper(currentPage, totalPages)
+  const totalPages = Math.ceil(tasks.length / TASKS_PER_PAGE)
+  const startIndex = (currentPage - 1) * TASKS_PER_PAGE
+  const endIndex = startIndex + TASKS_PER_PAGE
+  const currentTasks = tasks.slice(startIndex, endIndex)
 
-    return {
-      totalPages,
-      startIndex,
-      endIndex,
-      currentTasks,
-      pageNumbers,
-    }
-  }, [tasks, currentPage])
+  const handlePageChange = (page) => {
+    setCurrentPage(Math.max(1, Math.min(page, totalPages)))
+  }
 
-  const handlers = useCallback(
-    () => ({
-      handlePageChange: (page) => {
-        setCurrentPage(page)
-        window.scrollTo({ top: 0, behavior: "smooth" })
-      },
-      handleFav: (taskId) => {
-        onFav(taskId)
-      },
-      handleEdit: (task) => {
-        onEdit(task)
-      },
-      handleDelete: (taskId, taskTitle) => {
-        onDelete(taskId, taskTitle)
-      },
-    }),
-    [onFav, onEdit, onDelete],
-  )
-
-  const { totalPages, startIndex, endIndex, currentTasks, pageNumbers } = paginationData
-  const { handlePageChange, handleFav, handleEdit, handleDelete } = handlers()
+  if (tasks.length === 0) {
+    return <EmptyState />
+  }
 
   return (
-    <div className="w-full space-y-6">
-      {/* Tasks Container */}
-      <div className="space-y-3 min-h-[600px]">
-        {currentTasks.length > 0 ? (
-          currentTasks.map((task, index) => (
-            <div
-              key={task.id}
-              className="border border-gray-700/30 rounded-lg p-5 hover:bg-gray-800/30 duration-200 bg-gray-800/10 hover:shadow-lg hover:shadow-blue-500/5 transition-all group"
-              style={{
-                animation: `slideIn 0.3s ease-out ${index * 0.1}s both`,
-              }}
-            >
-              <div className="flex items-start justify-between gap-4 mb-3">
-                <div className="flex items-start gap-3 flex-1">
-                  <button
-                    onClick={() => handleFav(task.id)}
-                    className="mt-1 shrink-0 transition-transform hover:scale-110"
-                  >
-                    <Star
-                      size={18}
-                      className={
-                        task.isFavorite
-                          ? "fill-yellow-400 text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]"
-                          : "text-gray-600 hover:text-gray-400"
-                      }
-                    />
-                  </button>
-
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-gray-100 font-semibold text-lg mb-1">{task.title}</h3>
-                    <p className="text-gray-400 text-sm">{task.description}</p>
-                  </div>
-                </div>
-
-                <span
-                  className={`px-3 py-1 rounded-lg border text-xs font-semibold flex-shrink-0 ${getPriorityColor(
-                    task.priority,
-                  )}`}
-                >
-                  {task.priority}
-                </span>
-              </div>
-
-              <div className="flex flex-wrap gap-2 mb-4">
-                {task.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    style={getTagSolidStyle(tag)}
-                    className="inline-flex h-6 px-3 rounded-full text-xs capitalize whitespace-nowrap"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-
-              <div className="flex justify-end gap-2">
-                <button
-                  className="px-3 py-1.5 rounded-lg bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs hover:bg-blue-500/20 transition-colors"
-                  onClick={() => handleEdit(task)}
-                >
-                  Edit
-                </button>
-
-                <button
-                  className="px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-xs hover:bg-red-500/20 transition-colors"
-                  onClick={() => handleDelete(task.id, task.title)}
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
+    <div className="w-full">
+      <div className="space-y-3 mb-6">
+        {currentTasks.map((task) => (
+          <TaskCard
+            key={task.id}
+            task={task}
+            onEdit={onEdit}
+            onDelete={onDelete}
+            onFav={onFav}
+          />
+        ))}
+        {/* Fill empty slots to maintain consistent layout */}
+        {currentTasks.length < TASKS_PER_PAGE &&
+          Array.from({ length: TASKS_PER_PAGE - currentTasks.length }).map((_, idx) => (
+            <div key={`placeholder-${idx}`} className="h-[180px]" />
           ))
-        ) : (
-          <div className="flex flex-col items-center justify-center h-64 text-center">
-            <div className="text-gray-400 mb-2">
-              <MoreHorizontal className="w-12 h-12 mx-auto opacity-50" />
-            </div>
-            <p className="text-gray-400">No tasks found</p>
-          </div>
-        )}
+        }
       </div>
 
-      {totalPages > 1 && (
-        <div className="flex flex-col items-center gap-4 pt-6 border-t border-gray-700/30">
-          {/* Task Count Info */}
-          <div className="text-sm text-gray-400">
-            Showing <span className="font-semibold text-gray-300">{startIndex + 1}</span> to{" "}
-            <span className="font-semibold text-gray-300">{Math.min(endIndex, tasks.length)}</span> of{" "}
-            <span className="font-semibold text-gray-300">{tasks.length}</span> tasks
-          </div>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        startIndex={startIndex}
+        endIndex={endIndex}
+        totalItems={tasks.length}
+        onPageChange={handlePageChange}
+      />
 
-          {/* Custom Pagination with Lucide Icons */}
-          <div className="flex items-center justify-center gap-1 flex-wrap">
-            {/* Previous Button */}
-            <button
-              onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className={`inline-flex items-center justify-center gap-1 px-3 py-2 rounded-md transition-all ${
-                currentPage === 1
-                  ? "pointer-events-none opacity-50 cursor-not-allowed"
-                  : "cursor-pointer hover:bg-gray-800/50 text-gray-400 hover:text-gray-300"
-              }`}
-            >
-              <ChevronLeft size={16} />
-              <span className="text-sm">Prev</span>
-            </button>
-
-            {/* Page Numbers */}
-            {pageNumbers.map((page, index) =>
-              page === "..." ? (
-                <div key={`ellipsis-${index}`} className="px-2 py-2">
-                  <span className="text-gray-500">...</span>
-                </div>
-              ) : (
-                <button
-                  key={page}
-                  onClick={() => handlePageChange(page)}
-                  className={`px-3 py-2 rounded-md transition-all text-sm font-medium ${
-                    currentPage === page
-                      ? "bg-blue-500/20 border border-blue-500/50 text-blue-400"
-                      : "text-gray-400 hover:text-gray-300 hover:bg-gray-800/50"
-                  }`}
-                >
-                  {page}
-                </button>
-              ),
-            )}
-
-            {/* Next Button */}
-            <button
-              onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className={`inline-flex items-center justify-center gap-1 px-3 py-2 rounded-md transition-all ${
-                currentPage === totalPages
-                  ? "pointer-events-none opacity-50 cursor-not-allowed"
-                  : "cursor-pointer hover:bg-gray-800/50 text-gray-400 hover:text-gray-300"
-              }`}
-            >
-              <span className="text-sm">Next</span>
-              <ChevronRight size={16} />
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Add animation styles */}
-      <style jsx>{`
-        @keyframes slideIn {
-          from {
+      <style>{`
+        @keyframes dropdownSlide {
+          from { 
             opacity: 0;
             transform: translateY(10px);
           }
-          to {
+          to { 
             opacity: 1;
             transform: translateY(0);
           }
