@@ -56,7 +56,7 @@ const PriorityBadge = ({ priority }) => {
   const colorClass = PRIORITY_COLORS[priority?.toLowerCase()] || PRIORITY_COLORS.default
 
   return (
-    <span className={`px-3 py-1 rounded-lg border text-xs font-semibold flex-shrink-0 ${colorClass}`}>
+    <span className={`px-3 py-1 rounded-lg border text-xs font-semibold shrink-0 ${colorClass}`}>
       {priority}
     </span>
   )
