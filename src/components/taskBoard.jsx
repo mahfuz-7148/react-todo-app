@@ -168,7 +168,7 @@ export const TaskBoard = () => {
   }
 
   return (
-    <section className="mb-20" id="tasks">
+    <section id="tasks">
       {/* delete one modal */}
       <Modal
         isOpen={deleteModal.isOpen}

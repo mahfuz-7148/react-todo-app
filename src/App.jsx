@@ -55,7 +55,7 @@ export const App = () => {
 
   return (
     <>
-      <div className="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      <div className="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 pb-20">
         <Header />
         <HeroSection />
         <TaskBoard />
