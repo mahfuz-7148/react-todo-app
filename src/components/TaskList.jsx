@@ -1,32 +1,17 @@
-import { useState } from "react"
+import {useState} from 'react';
 import {TaskCard} from './TaskCard.jsx';
 import {Pagination} from './Pagination.jsx';
 
-const TASKS_PER_PAGE = 3
-
-const EmptyState = () => (
-  <div className="w-full flex items-center justify-center py-16">
-    <p className="text-gray-500 text-lg">No tasks found</p>
-  </div>
-)
-
-// Main Component
-export const TaskList = ({ tasks, onEdit, onDelete, onFav }) => {
+const tasksPerPage = 3
+export const TaskList = ({tasks, onEdit, onDelete, onFav}) => {
   const [currentPage, setCurrentPage] = useState(1)
-
-  const totalPages = Math.ceil(tasks.length / TASKS_PER_PAGE)
-  const startIndex = (currentPage - 1) * TASKS_PER_PAGE
-  const endIndex = startIndex + TASKS_PER_PAGE
+  const totalPages = Math.ceil(tasks.length / tasksPerPage)
+  const startIndex = (currentPage - 1) * tasksPerPage
+  const endIndex = startIndex + tasksPerPage
   const currentTasks = tasks.slice(startIndex, endIndex)
-
-  const handlePageChange = (page) => {
+  const handlePageChange = page => (
     setCurrentPage(Math.max(1, Math.min(page, totalPages)))
-  }
-
-  if (tasks.length === 0) {
-    return <EmptyState />
-  }
-
+  )
   return (
     <div className="w-full">
       <div className="space-y-3 mb-6">
@@ -40,8 +25,8 @@ export const TaskList = ({ tasks, onEdit, onDelete, onFav }) => {
           />
         ))}
         {/* Fill empty slots to maintain consistent layout */}
-        {currentTasks.length < TASKS_PER_PAGE &&
-          Array.from({ length: TASKS_PER_PAGE - currentTasks.length }).map((_, idx) => (
+        {currentTasks.length < tasksPerPage &&
+          Array.from({ length: tasksPerPage - currentTasks.length }).map((_, idx) => (
             <div key={`placeholder-${idx}`} className="h-[180px]" />
           ))
         }
